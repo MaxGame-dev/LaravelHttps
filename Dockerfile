@@ -13,7 +13,7 @@ RUN apk add --no-cache \
     npm
 
 RUN docker-php-ext-configure gd --with-jpeg \
-    && docker-php-ext-install pdo pdo_pgsql gd intl mbstring exif opcache
+    && docker-php-ext-install pdo pdo_pgsql pdo_mysql gd intl mbstring exif opcache
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
