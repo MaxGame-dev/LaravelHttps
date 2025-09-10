@@ -7,3 +7,4 @@ Route::get('/', function () {
 });
 
 Route::get('hello', 'App\Http\Controllers\HelloController@index');
+Route::get('sale-item-list/{id}', 'App\Http\Controllers\SaleItemListController@show');
