@@ -17,7 +17,7 @@ return new class extends Migration
         });
 
         Schema::create('sale_item_lists', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->id();
             $table->integer('sale_user_id');
             $table->string('item_title');
             $table->string('item_description');

@@ -34,6 +34,8 @@ class SaleItemListController extends Controller
         return view('sale_item_list')->with([
             'item_title' => $sale_item_data[0]['item_title'],
             'item_description' => $sale_item_data[0]['item_description'],
+            'item_start_price' => $sale_item_data[0]['start_price'],
+            'item_expired_date' => $sale_item_data[0]['expired_date'],
         ]);
     }
 

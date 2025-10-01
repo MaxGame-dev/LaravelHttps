@@ -20,4 +20,8 @@ class SaleItemList extends Model
         'start_price',
         'expired_date'
     ];
+
+    protected $casts = [
+        'expired_date' => 'datetime',
+    ];
 }

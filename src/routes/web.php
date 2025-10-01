@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SaleItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,3 +9,9 @@ Route::get('/', function () {
 
 Route::get('hello', 'App\Http\Controllers\HelloController@index');
 Route::get('sale-item-list/{id}', 'App\Http\Controllers\SaleItemListController@show');
+
+// 商品登録フォーム表示
+Route::get('/items/create', [SaleItemController::class, 'create'])->name('items.create');
+
+// 商品登録処理
+Route::post('/items', [SaleItemController::class, 'store'])->name('items.store');
