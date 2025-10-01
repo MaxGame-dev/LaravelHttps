@@ -30,13 +30,24 @@ class SaleItemListController extends Controller
     public function show(string $id)
     {
         $sale_item_data = SaleItemList::where('id',$id)->get();
-
-        return view('sale_item_list')->with([
-            'item_title' => $sale_item_data[0]['item_title'],
-            'item_description' => $sale_item_data[0]['item_description'],
-            'item_start_price' => $sale_item_data[0]['start_price'],
-            'item_expired_date' => $sale_item_data[0]['expired_date'],
-        ]);
+        // dd($sale_item_data); 
+        if ($sale_item_data->isNotEmpty()) {
+            return view('sale_item_list')->with([
+                'item_title' => $sale_item_data[0]['item_title'],
+                'item_description' => $sale_item_data[0]['item_description'],
+                'item_start_price' => $sale_item_data[0]['start_price'],
+                'item_expired_date' => $sale_item_data[0]['expired_date'],
+                'item_image' => $sale_item_data[0]['item_image'],
+            ]);
+        } else {
+            return view('sale_item_list')->with([
+                'item_title' => "登録なし",
+                'item_description' => "",
+                'item_start_price' => "",
+                'item_expired_date' => "",
+                'item_image' => "",
+            ]);            
+        }
     }
 
     /**

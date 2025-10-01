@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SaleItemList; // モデルをインポート
 use Illuminate\Support\Facades\Auth; // 認証情報を利用する場合
+use Illuminate\Support\Facades\Storage; // ★ Storageファサードをインポート
 
 class SaleItemController extends Controller
 {
@@ -21,44 +22,37 @@ class SaleItemController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. バリデーション（必須）
+        // 1. バリデーション
         $validated = $request->validate([
             'item_title'       => 'required|max:255',
             'item_description' => 'required',
+            'item_image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 最大2MB
             'start_price'      => 'required|integer|min:1',
             'expired_date'     => 'required|date|after:now',
         ]);
 
-        // 2. データの保存
-        $item = new SaleItemList();
-        // ログインユーザーのIDを sale_user_id に設定
-        // 実際には Auth::id() などを使って認証ユーザーIDを設定します。
-        // ここでは仮に '1' としています。
-        // $item->sale_user_id = Auth::id(); 
-        $item->sale_user_id = 1; 
-        
-        $item->item_title = $validated['item_title'];
-        $item->item_description = $validated['item_description'];
-        $item->start_price = $validated['start_price'];
-        $item->expired_date = $validated['expired_date'];
-        
-        $item->save();
-        
-        // または、一括代入（fill/create）を使用する場合
-        /*
-        SaleItemList::create([
-            'sale_user_id' => Auth::id() ?? 1, // 認証ユーザーID
-            'item_title' => $validated['item_title'],
+        $image_path = null;
+
+        // 2. ファイルのアップロード処理
+        if ($request->hasFile('item_image')) {
+            // 'public/items' ディレクトリに画像を保存し、ファイル名を取得
+            // LaravelのStorageファサードを使うと、ファイルシステム操作が簡単になります。
+            // 'public'ディスクは、storage/app/public に対応します。
+            $image_path = $request->file('item_image')->store('items', 'public');
+            // $image_path には、'items/ランダムなファイル名.jpg' のようなパスが格納されます。
+        }
+
+        // 3. データの保存 (createメソッドで一括保存)
+        $item = SaleItemList::create([
+            'sale_user_id'     => Auth::id() ?? 1, // ユーザーIDは適切に設定
+            'item_title'       => $validated['item_title'],
             'item_description' => $validated['item_description'],
-            'start_price' => $validated['start_price'],
-            'expired_date' => $validated['expired_date'],
+            'item_image'       => $image_path, // 保存したファイルパス/名をDBに格納
+            'start_price'      => $validated['start_price'],
+            'expired_date'     => $validated['expired_date'],
         ]);
-        */
 
-
-        // 3. リダイレクト
+        // 4. リダイレクト
         return redirect()->route('items.create')->with('success', '商品を出品しました！');
-        // または、登録後の商品詳細ページなどにリダイレクト
-        // return redirect()->route('items.show', $item->id)->with('success', '商品を出品しました！');
     }
 }

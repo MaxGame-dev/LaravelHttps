@@ -17,6 +17,7 @@ class SaleItemList extends Model
         'id','sale_user_id',
         'item_title',
         'item_description',
+        'item_image',
         'start_price',
         'expired_date'
     ];

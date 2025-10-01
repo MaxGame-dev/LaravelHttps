@@ -21,8 +21,9 @@
         </div>
     @endif
 
-    <form action="{{ route('items.store') }}" method="POST">
-        @csrf <div>
+    <form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div>
             <label for="item_title">商品タイトル:</label>
             <input type="text" id="item_title" name="item_title" value="{{ old('item_title') }}" required>
             @error('item_title')
@@ -34,6 +35,15 @@
         <div>
             <label for="item_description">商品説明:</label>
             <textarea id="item_description" name="item_description" required>{{ old('item_description') }}</textarea>
+        </div>
+        <br>
+
+        <div>
+            <label for="item_image">商品画像:</label>
+            <input type="file" id="item_image" name="item_image" accept="image/*">
+            @error('item_image')
+                <div style="color: red;">{{ $message }}</div>
+            @enderror
         </div>
         <br>
 
