@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SaleItemList; // モデルをインポート
 use Illuminate\Support\Facades\Auth; // 認証情報を利用する場合
-use Illuminate\Support\Facades\Storage; // ★ Storageファサードをインポート
+use Illuminate\Support\Facades\Storage; // Storageファサードをインポート
 
 class SaleItemController extends Controller
 {
@@ -54,5 +54,26 @@ class SaleItemController extends Controller
 
         // 4. リダイレクト
         return redirect()->route('items.create')->with('success', '商品を出品しました！');
+    }
+
+    /**
+     * Ajaxで呼ばれる商品説明の文字数チェック
+     */
+    public function checkDescription(Request $request)
+    {
+        $description = $request->input('description');
+        $maxLength = 30;
+        
+        // サーバー側でのバリデーションロジック
+        if (mb_strlen($description) > $maxLength) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '商品説明が30文字を超過しています。',
+            ], 422); // 422 Unprocessable Entity
+        }
+        return response()->json([
+            'status' => 'ok',
+            'message' => '文字数に問題ありません。',
+        ]);
     }
 }

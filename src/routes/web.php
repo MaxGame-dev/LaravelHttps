@@ -15,3 +15,6 @@ Route::get('/items/create', [SaleItemController::class, 'create'])->name('items.
 
 // 商品登録処理
 Route::post('/items', [SaleItemController::class, 'store'])->name('items.store');
+
+// 商品説明の文字数チェック専用のAjaxルート
+Route::post('/items/check-description', [SaleItemController::class, 'checkDescription'])->name('items.checkDescription');
