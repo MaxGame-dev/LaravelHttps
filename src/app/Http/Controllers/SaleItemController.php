@@ -27,7 +27,7 @@ class SaleItemController extends Controller
             'item_title'       => 'required|max:255',
             'item_description' => 'required',
             'item_image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 最大2MB
-            'start_price'      => 'required|integer|min:1',
+            'start_price'      => 'required|integer|min:1|max:2147483647', 
             'expired_date'     => 'required|date|after:now',
         ]);
 

@@ -13,7 +13,13 @@ class SaleItemListController extends Controller
      */
     public function index()
     {
-        //
+        // SaleItemListモデルからすべての商品データを取得
+        // 必要に応じてページネーション (paginate) を使用しても良い
+        $items = SaleItemList::orderBy('id', 'desc')->get(); 
+
+        return view('sale_item_list_index', [
+            'items' => $items,
+        ]);
     }
 
     /**
